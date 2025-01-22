@@ -22,6 +22,10 @@ from django.shortcuts import redirect
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+<<<<<<< HEAD
     path('', lambda request: redirect('/base/login/')),
+=======
+    path('', lambda request: redirect('/base/login/')),  # Redirige la raíz a la vista de login
+>>>>>>> e86ca683c80b579a57fa522346a5315193b40d52
     path('base/', include('base.urls')),  # Incluye las rutas de la aplicación 'base'
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
