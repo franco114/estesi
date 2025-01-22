@@ -47,22 +47,28 @@
             <div class="icono-medicion-completa"></div>
             <i><a href="{% url 'editar-tarea' tarea.id %}">{{ tarea.titulo }}&nbsp;&nbsp;&nbsp;&nbsp;Muestra Obtenida por:<strong>&nbsp;{{ tarea.integrantes }}</strong>&nbsp;&nbsp;&nbsp;&nbsp;Estado: Medida&nbsp;<strong>{{ tarea.fecha_medicion }}</strong></a></i>
         </div>
-        <td><a href="{% url 'editar-tarea' tarea.id %}">&#8684;</a></td>
-        {% elif tarea.completo %}
-        <div class="titulo-tarea">
-            <div class="icono-tarea-completa"></div>
-            <i><a href="{% url 'editar-tarea' tarea.id %}">{{ tarea.titulo }}&nbsp;&nbsp;&nbsp;&nbsp;Muestra Obtenida por:&nbsp;{{ tarea.integrantes }}&nbsp;&nbsp;&nbsp;&nbsp;<strong>Falta medir</strong></a></i>
-        </div>
-        <td><a href="{% url 'editar-tarea' tarea.id %}">&#8684;</a></td>
-        {% else %}
-        <div class="titulo-tarea">
-            <div class="icono-tarea-incompleta"></div>
-            <a href="{% url 'editar-tarea' tarea.id %}">{{ tarea.titulo }}&nbsp;&nbsp;&nbsp;&nbsp;Estado: Sin muestra&nbsp;&nbsp;&nbsp;&nbsp;Fecha limite:<strong>&nbsp;{{ tarea.fecha }}</strong></a>
-        </div>
-        <td><a href="{% url 'editar-tarea' tarea.id %}">&#8684;</a></td>
-        {% endif %}
+    <td><a href="{% url 'editar-tarea' tarea.id %}">&#8684;</a></td>
+    {% elif tarea.completo %}
+    <div class="titulo-tarea">
+        <div class="icono-tarea-completa"></div>
+        <i><a href="{% url 'editar-tarea' tarea.id %}">{{ tarea.titulo }}&nbsp;&nbsp;&nbsp;&nbsp;Muestra Obtenida por:&nbsp;{{ tarea.integrantes }}&nbsp;&nbsp;&nbsp;&nbsp;<strong>Falta medir</strong></a></i>
     </div>
-    {% endfor %}
+    <td><a href="{% url 'editar-tarea' tarea.id %}">&#8684;</a></td>
+    {% else %}
+    <div class="titulo-tarea">
+        <div class="icono-tarea-incompleta"></div>
+        <a href="{% url 'editar-tarea' tarea.id %}">{{ tarea.titulo }}&nbsp;&nbsp;&nbsp;&nbsp;Estado:
+            {% if tarea.justificacion %}
+                {{ tarea.justificacion }}
+            {% else %}
+                Sin muestra
+            {% endif %}&nbsp;&nbsp;&nbsp;&nbsp;Fecha límite:<strong>&nbsp;{{ tarea.fecha }}</strong></a>
+    </div>
+    <td><a href="{% url 'editar-tarea' tarea.id %}">&#8684;</a></td>
+    {% endif %}
+</div>
+{% endfor %}
+
 </div>
 
 {% endblock content %}

@@ -15,7 +15,7 @@
     <div class="title-container">
         <h1>Sistema de gestión y seguimiento del Monitoreo Ambiental Radiológico</h1>
     </div>
-    
+
     <div class="grupo-card-container">
         <!-- Quincenales -->
         <div class="grupo-card">
@@ -42,7 +42,7 @@
             <h2>Mensuales</h2>
             <div class="grupos-trabajo">
                 {% for grupo in grupos %}
-                {% if grupo.titulo == "AGUA SUB" or grupo.titulo == "AGUA DE RIO" or grupo.titulo == "LECHE" or grupo.titulo == "DIETA" or grupo.titulo == "AGUA CONSUMO HUMANO" %}
+                {% if grupo.titulo == "AGUA SUB" or grupo.titulo == "AGUA DE RIO" or grupo.titulo == "DIETA" or grupo.titulo == "AGUA CONSUMO HUMANO" %}
                 <div class="grupo-trabajo" data-grupo="{{ grupo.id }}">
                     <h3>{{ grupo.titulo }}</h3>
                     <div class="anios">
@@ -56,13 +56,50 @@
                 {% endfor %}
             </div>
         </div>
-
+        <!-- Trimestral -->
+        <div class="grupo-card">
+            <h2>Trimestrales</h2>
+            <div class="grupos-trabajo">
+                {% for grupo in grupos %}
+                {% if grupo.titulo == "LECHE"  %}
+                <div class="grupo-trabajo" data-grupo="{{ grupo.id }}">
+                    <h3>{{ grupo.titulo }}</h3>
+                    <div class="anios">
+                        {% for anio in grupo.anios.all %}
+                        <div class="anio" data-anio="{{ anio.anio }}">{{ anio.anio }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <hr>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
         <!-- Semestrales -->
         <div class="grupo-card">
             <h2>Semestrales</h2>
             <div class="grupos-trabajo">
                 {% for grupo in grupos %}
-                {% if grupo.titulo == "SUELOS" or grupo.titulo == "SEDIMENTOS" or grupo.titulo == "PESCADO" %}
+                {% if grupo.titulo == "SUELOS" or grupo.titulo == "SEDIMENTOS" or grupo.titulo == "PESCADO" or grupo.titulo == "POZOS" %}
+                <div class="grupo-trabajo" data-grupo="{{ grupo.id }}">
+                    <h3>{{ grupo.titulo }}</h3>
+                    <div class="anios">
+                        {% for anio in grupo.anios.all %}
+                        <div class="anio" data-anio="{{ anio.anio }}">{{ anio.anio }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <hr>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+                <!-- ANUAL -->
+        <div class="grupo-card">
+            <h2>Anuales</h2>
+            <div class="grupos-trabajo">
+                {% for grupo in grupos %}
+                {% if grupo.titulo == "TLD"%}
                 <div class="grupo-trabajo" data-grupo="{{ grupo.id }}">
                     <h3>{{ grupo.titulo }}</h3>
                     <div class="anios">
@@ -92,7 +129,7 @@
             <thead>
                 <tr>
                     <th>Título</th>
-                    <th>Grupo de Trabajo</th>
+                    <th>Justificacion</th>
                     <th>Año</th>
                     <th>Fecha</th>
                 </tr>
@@ -101,7 +138,7 @@
                 {% for tarea in tareas_vencidas %}
                 <tr>
                     <td>{{ tarea.titulo }}</td>
-                    <td>{{ tarea.grupo_de_trabajo }}</td>
+                    <td>{{ tarea.justificacion }}</td>
                     <td>{{ tarea.anio }}</td>
                     <td>{{ tarea.fecha }}</td>
                 </tr>

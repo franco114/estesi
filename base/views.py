@@ -11,28 +11,32 @@ import os
 from django.conf import settings
 from datetime import date
 from django.views.generic import TemplateView
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+import logging
+
+logger = logging.getLogger(__name__)
 
 
-
-
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class GruposTrabajoView(TemplateView):
     template_name = "base/grupos_trabajo.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["grupos"] = GrupoDeTrabajo.objects.prefetch_related('anios').all()
-        
+
         # Calcular la cantidad de muestras vencidas
         today = date.today()
         muestras_vencidas = Tarea.objects.filter(fecha__lte=today, completo=False, medicion_completa=False).count()
         context['muestras_vencidas'] = muestras_vencidas
-        
+
         # Incluir las tareas vencidas en el contexto si se hizo clic en "muestras vencidas"
         if self.request.GET.get("vencidas") == "True":
             context['tareas_vencidas'] = Tarea.objects.filter(fecha__lte=today, completo=False, medicion_completa=False)
         else:
             context['tareas_vencidas'] = None
-        
+
         return context
 
 
@@ -46,6 +50,7 @@ class Logueo(LoginView):
     def get_success_url(self):
         return reverse_lazy("grupos_trabajo")
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class analisisDeResultado(ListView):
     model = Tarea
     context_object_name = "tareas"
@@ -80,7 +85,7 @@ class listaPendientes(ListView):
         vencidas = self.request.GET.get("vencidas")
 
         # Filtramos por grupo y año si están presentes
-        tareas = Tarea.objects.all()
+        tareas = Tarea.objects.select_related('grupo_de_trabajo', 'anio')
         if grupo_id:
             tareas = tareas.filter(grupo_de_trabajo_id=grupo_id)
         if anio:
@@ -117,7 +122,7 @@ class EditarTareas(UpdateView):
 
     def form_valid(self, form):
         tarea = form.save(commit=False)
-        
+
         # Mantener los valores originales de grupo_de_trabajo y anio
         tarea.grupo_de_trabajo = self.object.grupo_de_trabajo
         tarea.anio = self.object.anio
